@@ -50,7 +50,11 @@ describe('<%= humanizedModelName %> Model Unit Tests:', function() {
 		<%= classifiedModelName %>.remove().exec(function(){
 			User.remove().exec(function(){
 				done();
+<<<<<<< HEAD
 			});
+=======
+			});	
+>>>>>>> 0.4-dev
 		});
 	});
 });

@@ -3,6 +3,8 @@
 [![Build Status](https://travis-ci.org/meanjs/generator-meanjs.svg?branch=master)](https://travis-ci.org/meanjs/generator-meanjs)
 [![Dependencies Status](https://david-dm.org/meanjs/generator-meanjs.svg)](https://david-dm.org/meanjs/generator-meanjs)
 
+#This branch is under heavy development, and is broken. 
+
 MEAN.JS is a full-stack JavaScript open-source solution, which provides a solid starting point for [MongoDB](http://www.mongodb.org/), [Node.js](http://www.nodejs.org/), [Express](http://expressjs.com/), and [AngularJS](http://angularjs.org/) based applications. The idea is to solve the common issues with connecting those frameworks, build a robust framework to support daily development needs, and help developers use better practices while working with popular JavaScript components.
 ## Overview
 
@@ -275,7 +277,11 @@ This will create a test file for your Express model, and if the sub-generator do
 
 **Don’t forget!** You're supposed to pass the model name as an argument.
 
+## Name transformations
+The MEAN.JS generator uses the [underscore.inflections](https://www.npmjs.com/package/underscore.inflections) library for creating the module names, file names, and various paths used by MEAN.JS throughout the web application. When a module name is provided, the name goes through three different transformations: slugify, camelize, classify, and humanize. Each is used for different purposes based on specific-use context throughout the MEAN.JS application. 
+
+See the link provided if you wish to understand particular behaviors, or if you need to change the default behavior for particular words.
+
 ## License
 
 [BSD license](http://opensource.org/licenses/bsd-license.php)
-
