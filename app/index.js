@@ -6,62 +6,76 @@ var util = require('util'),
 
 
 var MeanGenerator = yeoman.generators.Base.extend({
-	init: function() {
-		// read the local package file
-		this.pkg = yeoman.file.readJSON(path.join(__dirname, '../package.json'));
+	initializing: {
+		greet: function() {
+			// replace it with a short and sweet description of your generator
+			console.log('Welcome to the ' + chalk.blue('Properly ') + chalk.red('Mean ') + chalk.yellow('JavaScript ') + 'generator');
+		},
+		getPackage: function() {
+			// read the local package file
+			this.pkg = yeoman.file.readJSON(path.join(__dirname, '../package.json'));
+		},
+	},
 
-		// invoke npm install on finish
-		this.on('end', function() {
-			if (!this.options['skip-install']) {
-				this.npmInstall();
-			}
-		});
+	install: {
+		npm: function() {
+			// invoke npm install on finish
+			this.on('end', function() {
+				if (!this.options['skip-install']) {
+					this.npmInstall();
+				}
+			});
+		}
+	},
 
-		// have Yeoman greet the user
-		console.log(this.yeoman);
-
-
-		// replace it with a short and sweet description of your generator
-		console.log(chalk.magenta('You\'re using the official MEAN.JS 0.4 generator.'));
+	end: {
+		goodbye: function() {
+			console.log('Your in good hands with the  ' + chalk.blue('Properly ') + chalk.red('Mean ') + chalk.yellow('JavaScript ') + 'generator');
+			console.log('Time to start building');
+		}
 	},
 
 	askForApplicationDetails: function() {
 		var done = this.async();
 
-		var prompts = [{
-			name: 'appName',
-			message: 'What would you like to call your application?',
-			default: 'MEAN'
-		}, {
-			name: 'appDescription',
-			message: 'How would you describe your application?',
-			default: 'Full-Stack JavaScript with MongoDB, Express, AngularJS, and Node.js'
-		}, {
-			name: 'appKeywords',
-			message: 'How would you describe your application in comma separated key words?',
-			default: 'MongoDB, Express, AngularJS, Node.js'
-		}, {
-			name: 'appAuthor',
-			message: 'What is your company/author name?'
-		}, {
-			type: 'confirm',
-			name: 'addArticleExample',
-			message: 'Would you like to generate the article example CRUD module?',
-			default: true
-		}, {
-			type: 'confirm',
-			name: 'addChatExample',
-			message: 'Would you like to generate the chat example module? (adds socket.io support)',
-			default: true
-		}];
+		var prompts = [
+			{
+				name: 'appName',
+				message: 'What would you like to call your application?',
+				default: 'MEAN'
+			}, 
+			// {
+			// 	name: 'appDescription',
+			// 	message: 'How would you describe your application?',
+			// 	default: 'Full-Stack JavaScript with MongoDB, Express, AngularJS, and Node.js'
+			// }, 
+			// {
+			// 	name: 'appKeywords',
+			// 	message: 'How would you describe your application in comma separated key words?',
+			// 	default: 'MongoDB, Express, AngularJS, Node.js'
+			// }, 
+			// {
+			// 	name: 'appAuthor',
+			// 	message: 'What is your company/author name?'
+			// }, 
+			// {
+			// 	type: 'confirm',
+			// 	name: 'addChatExample',
+			// 	message: 'Would you like to generate the chat example module? (adds socket.io support)',
+			// 	default: true
+			// }
+		];
 
 		this.prompt(prompts, function(props) {
 			this.appName = props.appName;
-			this.appDescription = props.appDescription;
-			this.appKeywords = props.appKeywords;
-			this.appAuthor = props.appAuthor;
-			this.addArticleExample = props.addArticleExample;
-			this.addChatExample = props.addChatExample;
+			// this.appDescription = props.appDescription;
+			// this.appKeywords = props.appKeywords;
+			// this.appAuthor = props.appAuthor;
+			// this.addChatExample = props.addChatExample;
+			this.addChatExample = false;
+			this.appDescription = '';
+			this.appKeywords = '';
+			this.appAuthor = '';
 
 			this.slugifiedAppName = this._.slugify(this.appName);
 			this.humanizedAppName = this._.humanize(this.appName);
@@ -75,40 +89,51 @@ var MeanGenerator = yeoman.generators.Base.extend({
 		var done = this.async();
 
 		var prompts = [
-			{
-				type: 'checkbox',
-				name: 'modules',
-				message: 'Which modules would you like to include?',
-				choices: [{
-					value: 'angularCookies',
-					name: 'ngCookies',
-					checked: true
-				}, {
-					value: 'angularAnimate',
-					name: 'ngAnimate',
-					checked: true
-				}, {
-					value: 'angularTouch',
-					name: 'ngTouch',
-					checked: true
-				}, {
-					value: 'angularSanitize',
-					name: 'ngSanitize',
-					checked: true
-				}, {
-					value: 'socket.io',
-					name: 'socketio',
-					checked: true
-				}]
-			}
+			// {
+			// 	type: 'checkbox',
+			// 	name: 'modules',
+			// 	message: 'Which modules would you like to include?',
+			// 	choices: [
+			// 		{
+			// 			value: 'angularCookies',
+			// 			name: 'ngCookies',
+			// 			checked: true
+			// 		},
+			// 		{
+			// 			value: 'angularAnimate',
+			// 			name: 'ngAnimate',
+			// 			checked: true
+			// 		}, 
+			// 		{
+			// 			value: 'angularTouch',
+			// 			name: 'ngTouch',
+			// 			checked: true
+			// 		}, 
+			// 		{
+			// 			value: 'angularSanitize',
+			// 			name: 'ngSanitize',
+			// 			checked: true
+			// 		}, 
+			// 		{
+			// 			value: 'socket.io',
+			// 			name: 'socketio',
+			// 			checked: true
+			// 		}
+			// 	]
+			// }
 		];
 
 		this.prompt(prompts, function(props) {
-			this.angularCookies = this._.contains(props.modules, 'angularCookies');
-			this.angularAnimate = this._.contains(props.modules, 'angularAnimate');
-			this.angularTouch = this._.contains(props.modules, 'angularTouch');
-			this.angularSanitize = this._.contains(props.modules, 'angularSanitize');
-			this.socketio = this.renderChatExample || this._.contains(props.modules, 'socketio');
+			// this.angularCookies = this._.contains(props.modules, 'angularCookies');
+			// this.angularAnimate = this._.contains(props.modules, 'angularAnimate');
+			// this.angularTouch = this._.contains(props.modules, 'angularTouch');
+			// this.angularSanitize = this._.contains(props.modules, 'angularSanitize');
+			// this.socketio = this.renderChatExample || this._.contains(props.modules, 'socketio');
+			this.angularCookies = true;
+			this.angularAnimate = false;
+			this.angularTouch = false;
+			this.angularSanitize = true;
+			this.socketio = false;
 
 			done();
 		}.bind(this));
@@ -146,15 +171,8 @@ var MeanGenerator = yeoman.generators.Base.extend({
 		// Copy project files
 		this.copy('root-assets/karma.conf.js', 'karma.conf.js');
 		this.copy('root-assets/gruntfile.js', 'gruntfile.js');
-		this.copy('root-assets/gulpfile.js', 'gulpfile.js');
 		this.copy('root-assets/server.js', 'server.js');
-		this.copy('root-assets/Procfile', 'Procfile');
-		this.copy('root-assets/fig.yml', 'fig.yml');
 		this.copy('root-assets/Dockerfile', 'Dockerfile');
-		this.copy('root-assets/generate-ssl-certs.sh', 'generate-ssl-certs.sh');
-		this.copy('root-assets/README.md', 'README.md');
-		this.copy('root-assets/LICENSE.md', 'LICENSE.md');
-        this.copy('root-assets/protractor.conf.js', 'protractor.conf.js');
         
 		// Copy project hidden files
 		this.copy('root-assets/bowerrc', '.bowerrc');
@@ -162,8 +180,6 @@ var MeanGenerator = yeoman.generators.Base.extend({
 		this.copy('root-assets/editorconfig', '.editorconfig');
 		this.copy('root-assets/jshintrc', '.jshintrc');
 		this.copy('root-assets/gitignore', '.gitignore');
-		this.copy('root-assets/slugignore', '.slugignore');
-		this.copy('root-assets/travis.yml', '.travis.yml');
         
         // Create the public dir
         this.mkdir('public');
@@ -171,18 +187,11 @@ var MeanGenerator = yeoman.generators.Base.extend({
         this.copy('public/humans.txt');
         this.copy('public/robots.txt');
 	},
-
-	renderArticleExample: function() {
-		// Copy example files if desired
-		if (this.addArticleExample) {
-			this.directory('modules/articles');
-		}
-	},
     
     renderChatExample: function() {
-        if (this.addChatExample) {
-            this.directory('modules/chat');
-        }
+        // if (this.addChatExample) {
+        //     this.directory('modules/chat');
+        // }
     },
 
 	renderApplicationEnvironmentConfigFiles: function() {
