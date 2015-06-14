@@ -20,10 +20,6 @@ var <%= classifiedSingularName %>Schema = new Schema({
 		type: Date,
 		default: Date.now
 	},
-	user: {
-		type: Schema.ObjectId,
-		ref: 'User'
-	}
 });
 
 mongoose.model('<%= classifiedSingularName %>', <%= classifiedSingularName %>Schema);

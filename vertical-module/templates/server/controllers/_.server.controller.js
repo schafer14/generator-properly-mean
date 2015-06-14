@@ -6,8 +6,7 @@
 var _ = require('lodash'),
 	path = require('path'),
 	mongoose = require('mongoose'),
-	<%= classifiedSingularName %> = mongoose.model('<%= classifiedSingularName %>'),
-	errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
+	<%= classifiedSingularName %> = mongoose.model('<%= classifiedSingularName %>');
 
 /**
  * Create a <%= humanizedSingularName %>
@@ -18,9 +17,7 @@ exports.create = function(req, res) {
 
 	<%= camelizedSingularName %>.save(function(err) {
 		if (err) {
-			return res.status(400).send({
-				message: errorHandler.getErrorMessage(err)
-			});
+			return res.status(400).json('Unable to save <%= classifiedSingularName %>');
 		} else {
 			res.jsonp(<%= camelizedSingularName %>);
 		}
@@ -44,9 +41,7 @@ exports.update = function(req, res) {
 
 	<%= camelizedSingularName %>.save(function(err) {
 		if (err) {
-			return res.status(400).send({
-				message: errorHandler.getErrorMessage(err)
-			});
+			return res.status(400).json('Unable to update <%= humanizedSingularName %>');
 		} else {
 			res.jsonp(<%= camelizedSingularName %>);
 		}
@@ -61,9 +56,7 @@ exports.delete = function(req, res) {
 
 	<%= camelizedSingularName %>.remove(function(err) {
 		if (err) {
-			return res.status(400).send({
-				message: errorHandler.getErrorMessage(err)
-			});
+			return res.status(400).json('Unable to delete <%= humanizedSingularName %>');
 		} else {
 			res.jsonp(<%= camelizedSingularName %>);
 		}
@@ -75,9 +68,7 @@ exports.delete = function(req, res) {
  */
 exports.list = function(req, res) { <%= classifiedSingularName %>.find().sort('-created').populate('user', 'displayName').exec(function(err, <%= camelizedPluralName %>) {
 		if (err) {
-			return res.status(400).send({
-				message: errorHandler.getErrorMessage(err)
-			});
+			return res.status(400).json('Unable to find <%= humanizedPluralName %>');
 		} else {
 			res.jsonp(<%= camelizedPluralName %>);
 		}
@@ -87,10 +78,14 @@ exports.list = function(req, res) { <%= classifiedSingularName %>.find().sort('-
 /**
  * <%= humanizedSingularName %> middleware
  */
-exports.<%= camelizedSingularName %>ByID = function(req, res, next, id) { <%= classifiedSingularName %>.findById(id).populate('user', 'displayName').exec(function(err, <%= camelizedSingularName %>) {
-		if (err) return next(err);
-		if (! <%= camelizedSingularName %>) return next(new Error('Failed to load <%= humanizedSingularName %> ' + id));
-		req.<%= camelizedSingularName %> = <%= camelizedSingularName %> ;
-		next();
-	});
+exports.<%= camelizedSingularName %>ByID = function(req, res, next, id) { 
+	<%= classifiedSingularName %>.findById(id)
+		.exec(function(err, <%= camelizedSingularName %>) {
+			if (err) return next(err);
+			if (! <%= camelizedSingularName %>) {
+				return next(new Error('Failed to load <%= humanizedSingularName %> ' + id));
+			}
+			req.<%= camelizedSingularName %> = <%= camelizedSingularName %> ;
+			next();
+		});
 };

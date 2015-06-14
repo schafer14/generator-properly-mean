@@ -11,6 +11,9 @@
 		"angular-bootstrap": "~0.11.0",
 		"angular-ui-utils": "~0.1.1",
 		"angular-ui-router": "~0.2.10",
-		"angular-file-upload": "~1.1.5"
+		"angular-file-upload": "~1.1.5", 
+		"ng-table": "~0.5.4",
+    	"ng-context-menu": "~1.0.1",
+    	"jquery": "~2.1.4"
 	}
 }

@@ -21,44 +21,56 @@ var ModuleGenerator = yeoman.generators.NamedBase.extend({
 		this.humanizedSingularName = this._.humanize(this.slugifiedSingularName);
 	},
 
+	end: function() {
+		console.log('All done: time to start building');
+	},
+
 	askForModuleFolders: function() {
 		var done = this.async();
 
-		var prompts = [{
-			type: 'checkbox',
-			name: 'folders',
-			message: 'Which supplemental folders would you like to include in your angular module?',
-			choices: [{
-				value: 'addCSSFolder',
-				name: 'css',
-				checked: false
-			}, {
-				value: 'addImagesFolder',
-				name: 'img',
-				checked: false
-			}, {
-				value: 'addDirectivesFolder',
-				name: 'directives',
-				checked: false
-			}, {
-				value: 'addFiltersFolder',
-				name: 'filters',
-				checked: false
-			}]
-		}, {
-			type: 'confirm',
-			name: 'addMenuItems',
-			message: 'Would you like to add the CRUD module links to a menu?',
-			default: true
-		}];
+		var prompts = [
+			// {
+			// 	type: 'checkbox',
+			// 	name: 'folders',
+			// 	message: 'Which supplemental folders would you like to include in your angular module?',
+			// 	choices: [{
+			// 		value: 'addCSSFolder',
+			// 		name: 'css',
+			// 		checked: false
+			// 	}, {
+			// 		value: 'addImagesFolder',
+			// 		name: 'img',
+			// 		checked: false
+			// 	}, {
+			// 		value: 'addDirectivesFolder',
+			// 		name: 'directives',
+			// 		checked: false
+			// 	}, {
+			// 		value: 'addFiltersFolder',
+			// 		name: 'filters',
+			// 		checked: false
+			// 	}]
+			// }, 
+			// {
+			// 	type: 'confirm',
+			// 	name: 'addMenuItems',
+			// 	message: 'Would you like to add the CRUD module links to a menu?',
+			// 	default: true
+			// }
+		];
 
 		this.prompt(prompts, function(props) {
-			this.addCSSFolder = this._.contains(props.folders, 'addCSSFolder');
-			this.addImagesFolder = this._.contains(props.folders, 'addImagesFolder');
-			this.addDirectivesFolder = this._.contains(props.folders, 'addDirectivesFolder');
-			this.addFiltersFolder = this._.contains(props.folders, 'addFiltersFolder');
+			this.addCSSFolder = false;
+			this.addImagesFolder = false;
+			this.addDirectivesFolder = false;
+			this.addFiltersFolder = false;
+			// this.addCSSFolder = this._.contains(props.folders, 'addCSSFolder');
+			// this.addImagesFolder = this._.contains(props.folders, 'addImagesFolder');
+			// this.addDirectivesFolder = this._.contains(props.folders, 'addDirectivesFolder');
+			// this.addFiltersFolder = this._.contains(props.folders, 'addFiltersFolder');
 
-			this.addMenuItems = props.addMenuItems;
+			// this.addMenuItems = props.addMenuItems;
+			this.addMenuItems = true;
 
 			done();
 		}.bind(this));
@@ -68,14 +80,16 @@ var ModuleGenerator = yeoman.generators.NamedBase.extend({
 		if (this.addMenuItems) {
 			var done = this.async();
 
-			var prompts = [{
-				name: 'menuId',
-				message: 'What is your menu identifier(Leave it empty and press ENTER for the default "topbar" menu)?',
-				default: 'topbar'
-			}];
+			var prompts = [
+				// {
+				// 	name: 'menuId',
+				// 	message: 'What is your menu identifier(Leave it empty and press ENTER for the default "topbar" menu)?',
+				// 	default: 'topbar'
+				// }
+			];
 
 			this.prompt(prompts, function(props) {
-				this.menuId = props.menuId;
+				this.menuId = 'topbar';
 
 				done();
 			}.bind(this));
@@ -103,14 +117,15 @@ var ModuleGenerator = yeoman.generators.NamedBase.extend({
 
 		// Render angular files
 		this.template('client/config/_.client.routes.js', 'modules/' + this.slugifiedPluralName + '/client/config/' + this.slugifiedPluralName + '.client.routes.js');
-		this.template('client/controllers/_.client.controller.js', 'modules/' + this.slugifiedPluralName + '/client/controllers/' + this.slugifiedPluralName + '.client.controller.js');
+		this.template('client/controllers/_list.client.controller.js', 'modules/' + this.slugifiedPluralName + '/client/controllers/list-' + this.slugifiedPluralName + '.client.controller.js');
+		this.template('client/controllers/_add.client.controller.js', 'modules/' + this.slugifiedPluralName + '/client/controllers/add-' + this.slugifiedPluralName + '-modal.client.controller.js');
+		this.template('client/controllers/_edit.client.controller.js', 'modules/' + this.slugifiedPluralName + '/client/controllers/edit-' + this.slugifiedPluralName + '-modal.client.controller.js');
 		this.template('client/services/_.client.service.js', 'modules/' + this.slugifiedPluralName + '/client/services/' + this.slugifiedPluralName + '.client.service.js');
 		
 		// Render angular module views
-		this.template('client/views/_.create.client.view.html', 'modules/' + this.slugifiedPluralName + '/client/views/create-' + this.slugifiedSingularName + '.client.view.html');
-		this.template('client/views/_.edit.client.view.html', 'modules/' + this.slugifiedPluralName + '/client/views/edit-' + this.slugifiedSingularName + '.client.view.html');
 		this.template('client/views/_.list.client.view.html', 'modules/' + this.slugifiedPluralName + '/client/views/list-' + this.slugifiedPluralName + '.client.view.html');
-		this.template('client/views/_.view.client.view.html', 'modules/' + this.slugifiedPluralName + '/client/views/view-' + this.slugifiedSingularName + '.client.view.html');
+		this.template('client/views/_.edit.client.view.html', 'modules/' + this.slugifiedPluralName + '/client/views/edit-' + this.slugifiedSingularName + '-modal.client.view.html');
+		this.template('client/views/_.add.client.view.html', 'modules/' + this.slugifiedPluralName + '/client/views/add-' + this.slugifiedSingularName + '-modal.client.view.html');
 
 		// Render angular module definition
 		this.template('client/_.client.module.js', 'modules/' + this.slugifiedPluralName + '/client/' + this.slugifiedPluralName + '.client.module.js');
@@ -121,10 +136,10 @@ var ModuleGenerator = yeoman.generators.NamedBase.extend({
 		}		
 
 		// Render tests files
-		this.template('tests/server/_.server.model.tests.js', 'modules/' + this.slugifiedPluralName + '/tests/server/' + this.slugifiedSingularName + '.server.model.tests.js');
-		this.template('tests/server/_.server.routes.tests.js', 'modules/' + this.slugifiedPluralName + '/tests/server/' + this.slugifiedSingularName + '.server.routes.tests.js');
-		this.template('tests/client/_.client.controller.tests.js', 'modules/' + this.slugifiedPluralName + '/tests/client/' + this.slugifiedPluralName + '.client.controller.tests.js');
-		this.template('tests/e2e/_.e2e.tests.js', 'modules/' + this.slugifiedPluralName + '/tests/e2e/' + this.slugifiedPluralName + '.e2e.tests.js');
+		// this.template('tests/server/_.server.model.tests.js', 'modules/' + this.slugifiedPluralName + '/tests/server/' + this.slugifiedSingularName + '.server.model.tests.js');
+		// this.template('tests/server/_.server.routes.tests.js', 'modules/' + this.slugifiedPluralName + '/tests/server/' + this.slugifiedSingularName + '.server.routes.tests.js');
+		// this.template('tests/client/_.client.controller.tests.js', 'modules/' + this.slugifiedPluralName + '/tests/client/' + this.slugifiedPluralName + '.client.controller.tests.js');
+		// this.template('tests/e2e/_.e2e.tests.js', 'modules/' + this.slugifiedPluralName + '/tests/e2e/' + this.slugifiedPluralName + '.e2e.tests.js');
 	}
 });
 

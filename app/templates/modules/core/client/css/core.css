@@ -31,3 +31,23 @@ a:hover .header-profile-image {
 	padding-top: 11px !important;
 	padding-bottom: 11px !important;
 }
+
+.table-row-overlay {
+	z-index: 10;
+	background-color: #000000;
+	background-color: rgba(0, 0, 0, 0.7);
+	position: absolute;
+	display: none;
+}
+
+.table-row-overlay-inner {
+	text-align: center;
+	vertical-align: middle;
+	color: white;
+	font-weight: normal;
+	padding-top: 3px;
+}
+
+.table-row-overlay-text {
+	padding-top: 4px;
+}
